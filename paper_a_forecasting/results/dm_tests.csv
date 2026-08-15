@@ -1,0 +1,5 @@
+对比,DM统计量,p值,n,结论
+XGBoost vs SARIMA,5.42,0.0,2070,对方显著更优
+XGBoost vs Lasso,-0.021,0.9833,2070,差异不显著
+XGBoost vs RandomForest,-3.024,0.0025,2070,XGBoost显著更优
+XGBoost vs LSTM,-3.458,0.0005,2070,XGBoost显著更优

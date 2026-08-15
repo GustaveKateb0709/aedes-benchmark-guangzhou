@@ -1,0 +1,30 @@
+{
+  "title": "Code and data for deep reinforcement learning of proactive mosquito control for chikungunya prevention",
+  "upload_type": "software",
+  "description": "Python code, trained PPO policies, environment parameters and evaluation outputs that reproduce every number, table and figure in the manuscript 'Proactive mosquito control for chikungunya prevention: a deep reinforcement learning policy trained on a weather-driven simulator and evaluated on a held-out year' (prepared for PLOS Neglected Tropical Diseases). The Gymnasium environment wraps a literature-parameterized mechanistic simulator of the weekly Breteau index driven by ERA5 weather for ten Guangzhou grids (2015-2022).",
+  "access_right": "open",
+  "license": "mit",
+  "version": "1.0",
+  "language": "eng",
+  "creators": [
+    {
+      "name": "Wang, Tianyu",
+      "affiliation": "Guangdong Peizheng College",
+      "orcid": "REPLACE_WITH_YOUR_ORCID"
+    }
+  ],
+  "keywords": [
+    "mosquito control",
+    "chikungunya",
+    "reinforcement learning",
+    "proximal policy optimization",
+    "Breteau index",
+    "decision support",
+    "simulation"
+  ],
+  "communities": [
+    {
+      "identifier": "zenodo"
+    }
+  ]
+}

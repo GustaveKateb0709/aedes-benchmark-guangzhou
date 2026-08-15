@@ -1,0 +1,4 @@
+arm,return,return_sd,mean_bi,mean_bi_sd,cost,cost_sd,pct_weeks_ge10
+ppo_a0.1_s0_acts012,-2.231,0.243,2.16,0.05,157.5,1.6,0.32
+ppo_a0.1_s1_acts012,-2.55,0.205,2.21,0.08,155.9,2.6,0.62
+ppo_a0.1_s2_acts012,-2.361,0.198,2.19,0.05,155.8,2.2,0.6

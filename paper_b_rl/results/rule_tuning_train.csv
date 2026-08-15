@@ -1,0 +1,14 @@
+rule,params,train_return,train_mean_bi,train_cost,train_pct_w10,n_eps
+threshold,trigger=5,-21.637,4.602,511.1,12.72,70
+threshold,trigger=8,-29.53,5.446,399.3,17.71,70
+threshold,trigger=10,-37.345,6.008,334.4,21.8,70
+threshold,trigger=12,-47.893,6.597,279.0,26.32,70
+threshold,trigger=15,-72.708,7.658,190.1,33.82,70
+threshold,trigger=20,-115.524,8.932,95.8,41.51,70
+threshold,trigger=25,-172.412,10.171,15.8,46.9,70
+calendar,"sr_trigger=3,period=2",-22.868,4.274,102.2,9.82,70
+calendar,"sr_trigger=3,period=4",-58.791,6.88,57.4,27.26,70
+calendar,"sr_trigger=5,period=2",-25.706,4.976,80.8,11.08,70
+calendar,"sr_trigger=5,period=4",-60.932,7.01,54.1,28.17,70
+calendar,"sr_trigger=8,period=2",-33.337,5.853,66.0,16.38,70
+calendar,"sr_trigger=8,period=4",-64.153,7.194,50.2,29.61,70

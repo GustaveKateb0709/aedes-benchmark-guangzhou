@@ -1,0 +1,6 @@
+comparison,DM,p_value,n,verdict
+GAT vs XGBoost,4.722,2.335e-06,2070,baseline significantly better
+GAT vs RandomForest,3.472,5.172e-04,2070,baseline significantly better
+GAT vs Lasso,5.15,2.611e-07,2070,baseline significantly better
+GAT vs LSTM,1.362,1.733e-01,2070,no significant difference
+GAT vs SARIMA,6.84,7.893e-12,2070,baseline significantly better
