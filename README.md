@@ -59,11 +59,12 @@ is required. Random seeds are fixed (SEED=2024 for forecasting; PPO seeds
 
 ## Trained models and figures
 
-The trained PPO policy checkpoints (`models/`, ~7 MB of `.zip`/`.pkl`) and
-the rendered publication figures are distributed through a Zenodo archive
-(DOI will appear here upon publication) rather than this git repository.
-All figures can be regenerated from the CSVs in `results/` with
-`make_figures.py`.
+The trained PPO policy checkpoints (~7 MB of `.zip`/`.pkl`) are included in
+`paper_b_rl/models/`, so every evaluation can be reproduced without
+retraining. A long-term archive of this repository (including the rendered
+publication figures) will be deposited on Zenodo upon publication
+(DOI will appear here). All figures can be regenerated from the CSVs in
+`results/` with `make_figures.py`.
 
 ## Data sources
 

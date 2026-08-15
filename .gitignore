@@ -3,7 +3,6 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints/
 # trained checkpoints are distributed via Zenodo, not git
-paper_b_rl/models/
 # regenerated figures
 paper_b_rl/figures/
 paper_a_forecasting/figures/
