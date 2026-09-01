@@ -1,0 +1,5 @@
+comparison,DM_statistic,p_value,n,conclusion
+XGBoost vs SARIMA,5.42,0.0,2070,Other model significantly better
+XGBoost vs Lasso,-0.021,0.9833,2070,No significant difference
+XGBoost vs RandomForest,-3.024,0.0025,2070,XGBoost significantly better
+XGBoost vs LSTM,-3.458,0.0005,2070,XGBoost significantly better

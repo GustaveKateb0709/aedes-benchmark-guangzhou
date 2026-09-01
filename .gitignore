@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.ipynb_checkpoints/
+
+# Figures are regenerated with gnn/make_figures.py (and pipeline.py)
+figures/
+*.png
+*.pdf
