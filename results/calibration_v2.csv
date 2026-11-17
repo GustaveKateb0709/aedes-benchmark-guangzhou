@@ -1,0 +1,17 @@
+arm,model,slope,intercept,prev
+F0,Lasso,0.515,-5.642,0.427
+F0,RandomForest,0.433,-4.704,0.427
+F0,SARIMA,0.48,-4.985,0.425
+F0,XGBoost,0.449,-4.81,0.427
+F1,Lasso,0.548,-5.883,0.427
+F1,RandomForest,0.452,-4.893,0.427
+F1,XGBoost,0.467,-5.03,0.427
+F2,Lasso,0.574,-6.235,0.427
+F2,RandomForest,0.448,-4.816,0.427
+F2,XGBoost,0.462,-5.009,0.427
+F3,Lasso,0.574,-6.226,0.427
+F3,RandomForest,0.449,-4.807,0.427
+F3,XGBoost,0.465,-4.989,0.427
+F5,Lasso,0.569,-6.107,0.427
+F5,RandomForest,0.458,-4.951,0.427
+F5,XGBoost,0.47,-5.102,0.427

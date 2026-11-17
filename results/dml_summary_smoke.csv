@@ -1,0 +1,5 @@
+treatment,lag_weeks,n_panels,dml_ate_mean,dml_ate_sd,naive_ols_mean,truth_mean,coverage,abs_bias,detected_truth
+Rain,0,1,0.0296,,0.0877,0.0442,0.0,0.0146,0
+Rain,1,1,0.0163,,0.0789,0.0173,1.0,0.001,0
+T,0,1,0.2473,,1.1043,0.1908,0.0,0.0565,0
+T,1,1,0.1418,,1.097,0.186,0.0,0.0442,0
