@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Simulator v2 for the Aedes albopictus BI benchmark.
+Mechanistic simulator for the Aedes albopictus Breteau-index benchmark.
 
 Three scenarios share one parameter set:
 
@@ -18,14 +18,15 @@ Parameter provenance
 --------------------
 T_DEV0 = 10.4 C     Delatte et al. 2009 (J Med Entomol 46:33-41), minimal
                     developmental threshold for Ae. albopictus.
-DEV_A              Briere coefficient, unchanged from v1 so that the
-                    development curve keeps its published shape.
+DEV_A              Briere coefficient; the development curve keeps the
+                    published shape reported by Delatte et al. 2009.
 T_OPT_ADULT = 24.5  Doeurk et al. 2025 (Parasit Vectors 18:362), fitted optimum
                     of female adult cumulative survival for Ae. albopictus.
-                    (v1 used 27.0, which is the Ae. aegypti value in the same
-                    paper - see response to Reviewer 3, comment 12.)
-SURV_MAX, SURV_K    unchanged from v1; the Gaussian width is a modelling
-                    assumption and is tested in the structural sensitivity.
+                    (27.0, often quoted for this species complex, is the
+                    Ae. aegypti value in the same paper.)
+SURV_MAX, SURV_K    peak survival and Gaussian width; the width is a
+                    modelling assumption and is tested in the structural
+                    sensitivity.
 Humidity term       retained but flagged as an assumption: no source in the
                     reference set supplies a humidity response for adult
                     survival (AedesTraits explicitly excludes humidity).
@@ -35,9 +36,9 @@ Rainfall gain       retained as a phenomenological saturating gain, flagged as
 
 Observation noise
 -----------------
-v1 drew additive N(0, 1.5^2) and clipped at zero, which biases low-density
-weeks upward (Reviewer 3). v2 uses multiplicative log-normal noise with
-sigma_log = 0.15, which is positive by construction and has no boundary bias.
+Additive noise clipped at zero would bias low-density weeks upward. The
+multiplicative log-normal form used here, with sigma_log = 0.15, is positive
+by construction and has no boundary bias.
 """
 import json
 import os
@@ -46,7 +47,8 @@ import numpy as np
 import pandas as pd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.environ.get("AEGIS_DATA", "/tmp/at_work/repo/data")
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA = os.environ.get("AEGIS_DATA", os.path.join(HERE, "data"))
 
 GRIDS = ["conghua", "huadu", "zengcheng", "baiyun", "tianhe",
          "yuexiu", "haizhu", "panyu", "nansha", "huangpu"]

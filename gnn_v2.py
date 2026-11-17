@@ -3,7 +3,7 @@
 """
 Graph attention network under varying strengths of spatial coupling.
 
-Reviewer 2 asked whether message passing starts to pay once the system actually
+The question is whether message passing starts to pay once the system actually
 contains cross-grid dependence. kappa = 0 is the no-coupling case; kappa > 0
 lets each grid inherit part of its neighbours' productivity.
 
@@ -27,7 +27,8 @@ from exp import make_features, metrics, F0
 # so that a neighbour's observation is available to message passing.
 FEATS_G = F0 + ['BI_lag1']
 
-OUT = os.environ.get("AEGIS_OUT", "/tmp/at_work/v2/results")
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.environ.get("AEGIS_OUT", os.path.join(HERE, "results"))
 os.makedirs(OUT, exist_ok=True)
 torch.set_num_threads(2)
 

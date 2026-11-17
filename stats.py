@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Statistics for the v2 benchmark.
+Statistics for the benchmark.
 
 Implements the inference the reviewers asked for:
   * Diebold-Mariano with Newey-West HAC
@@ -19,7 +19,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats as sst
 
-OUT = os.environ.get("AEGIS_OUT", "/tmp/at_work/v2/results")
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.environ.get("AEGIS_OUT", os.path.join(HERE, "results"))
 
 
 # ------------------------------------------------------------------ DM family

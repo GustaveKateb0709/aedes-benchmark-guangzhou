@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Structural sensitivity: does the ranking survive alternative mechanism assumptions?"""
 import os, sys, itertools
-sys.path.insert(0, '/tmp/at_work/v2')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np, pandas as pd
 import sim
 from exp import make_features, fit_ml, metrics, F0
 import stats as st
 
-OUT = '/tmp/at_work/v2/results'
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results')
 SEEDS = [1, 2, 3, 4, 5]
 ROWS = []
 

@@ -1,26 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-DML audit, v2 -- simulator with a genuine multi-week lag structure
-=================================================================
+Double machine learning audit of the simulator's lag structure
+=============================================================
 
-What changed relative to gn/run_dml.py
---------------------------------------
-The v1 script hard-coded
-
-    true_val = float(np.mean(truth0)) if lag == 0 else 0.0
-
-because its simulator had no memory: BI(t) depended on week-t weather only,
-so every lagged effect was zero by construction.  Scenario L of sim.py puts
-immature development on a three-week kernel (0.50, 0.30, 0.20) and carries
-breeding-site water over weeks with rho = 0.60, so
+Scenario L of sim.py puts immature development on a three-week kernel
+(0.50, 0.30, 0.20) and carries breeding-site water over weeks with rho = 0.60,
+so
 
     BI(t) <- T(t), T(t-1), T(t-2)          (development kernel)
     BI(t) <- Rain(t), Rain(t-1), ...       (habitat recursion, geometric)
 
-and the lagged ground truth is no longer zero.  This script therefore
-replaces the hard-coded zero with a finite-difference truth computed through
-the same simulator that generated the data.
+Lagged effects are therefore non-zero, and the truth reported here is a
+finite difference computed through the same simulator that generated the data.
 
 Ground truth (finite difference, whole-series recomputation)
 ------------------------------------------------------------
@@ -45,19 +37,19 @@ Estimator (unchanged specification)
 Partially linear DML, XGBoost nuisance learners, 5-fold cross-fitting, five
 independent random splits, median of the five ATEs, cluster-robust (CR1 by
 grid) standard errors.  Naive unadjusted OLS as the confounded contrast.
-Dose-response by FWL-spline DML, curves anchored at the median dose (as in v1).
+Dose-response by FWL-spline DML, curves anchored at the median dose.
 
-One deliberate deviation from v1's confounder_for()
----------------------------------------------------
-v1 built the confounder matrix as
+Confounder matrix
+-----------------
+The confounder matrix is
 
     [sin_week, cos_week, pop_density, Hum, T, Rain, <other>_lag<k>]
 
-and then removed only '<tvar>_lag<k>'.  At lag 0 the treatment column *is*
-'T' (or 'Rain'), so the raw current-week value of the treatment stayed inside
-X, making the treatment collinear with its own residualiser.  That is not a
-defensible specification -- t_res collapses to noise and theta is arbitrary.
-Here the treatment column itself is dropped from X for every lag, which is the
+with the treatment column itself dropped for every lag.  Keeping it would put
+the raw current-week value of the treatment inside X at lag 0, where the
+treatment column *is* 'T' (or 'Rain'); the treatment would then be collinear
+with its own residualiser, t_res would collapse to noise and theta would be
+arbitrary.  Dropping the column is what the
 only change to the estimator.  Everything else is copied verbatim.
 
 Outputs (results/)
@@ -384,7 +376,7 @@ def main():
     ap.add_argument("--seeds", default="1,2,3,4,5,6,7,8,9,10")
     ap.add_argument("--reps", type=int, default=N_SPLIT_REPS)
     ap.add_argument("--lags", default="0,1,2,3,4,5,6")
-    ap.add_argument("--tag", default="v2")
+    ap.add_argument("--tag", default="main")
     a = ap.parse_args()
     seeds = [int(s) for s in a.seeds.split(",") if s.strip()]
     lags = [int(s) for s in a.lags.split(",")]

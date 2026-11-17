@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Experiment driver for simulator v2.
+Experiment driver for the simulator.
 
 Design grid
 -----------
@@ -9,7 +9,7 @@ scenario : M (memoryless) | L (lagged) | S (lagged + spatial coupling)
 arm      : F0  14 weather+season features (primary)
            F1  F0 + BI(t), BI(t-1)              information-set parity
            F2  F0 + grid dummies                legitimate spatial identity
-           F3  F0 + urbanisation proxy          the v1 "leakage" feature
+           F3  F0 + urbanisation proxy          the suspected leakage feature
            F4  F0 + noisified proxy             proxy with 10% / 30% error
            F5  F1 + F2                          everything observable
 model    : Lasso | RandomForest | XGBoost | SARIMA (feature-free)
@@ -28,7 +28,8 @@ import pandas as pd
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sim
 
-OUT = os.environ.get("AEGIS_OUT", "/tmp/at_work/v2/results")
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.environ.get("AEGIS_OUT", os.path.join(HERE, "results"))
 os.makedirs(OUT, exist_ok=True)
 
 F0 = ["GDD", "GDD_cum2", "GDD_cum4", "Rain_cum2", "Rain_cum4",

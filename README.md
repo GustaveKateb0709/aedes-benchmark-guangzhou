@@ -1,4 +1,4 @@
-# Information sets, not algorithms: a known-mechanism benchmark for *Aedes albopictus* density forecasting
+# Information sets outweigh algorithm choice in a simulation benchmark for *Aedes albopictus* density forecasting
 
 Code and data for the manuscript submitted to *Acta Tropica* (ACTROP-D-26-01728).
 
@@ -54,11 +54,14 @@ python exp.py --scenarios L --seeds 1,2,3 --arms F0,F1,F2,F3 --models Lasso,XGBo
 python gnn_v2.py --scenarios S --seeds 1 --kappa 0.6
 python run_dml_v2.py
 python sensitivity.py
-python figs.py --which 3,4
+python figs.py --which 1,2,3,4,5,6
 ```
 
 A single panel takes about four minutes on one CPU core with the full arm set, most of it in
 the per-grid SARIMA fits. Thirty panels were run for the manuscript.
+
+Figures 1 and 2 are produced from `data/` and `results/` alone. Figures 3 to 5 also read the
+per-observation predictions that `exp.py` writes; figure 6 additionally needs `shap`.
 
 ## What is in `results/`
 
