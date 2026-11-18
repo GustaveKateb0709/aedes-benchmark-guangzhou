@@ -39,7 +39,8 @@ stats.py               DM / CR1 / CR3 / exact sign-flip / DeLong / Benjamini-Hoc
 gnn_v2.py              graph attention network, identity-graph ablation, MLP control, kappa sweep
 run_dml_v2.py          double machine learning audit with finite-difference ground truth
 sensitivity.py         structural sensitivity: rainfall functional form and humidity term
-figs.py                every figure in the manuscript
+figs.py                the six manuscript figures
+figS1_lag_structure.py supplementary figure S1, drawn from results/dml_lag_effects_v2.csv
 requirements-lock.txt  exact package versions and platform
 data/                  weekly ERA5 aggregates for the ten grids, 2015-2022
 results/               per-panel metrics, DML output, sensitivity and calibration tables
@@ -55,6 +56,7 @@ python gnn_v2.py --scenarios S --seeds 1 --kappa 0.6
 python run_dml_v2.py
 python sensitivity.py
 python figs.py --which 1,2,3,4,5,6
+python figS1_lag_structure.py
 ```
 
 A single panel takes about four minutes on one CPU core with the full arm set, most of it in
