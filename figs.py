@@ -147,18 +147,27 @@ def save(fig, name):
 
 
 # --------------------------------------------------------------------- Fig 1
-F1_OFF = {"conghua": (0, 8), "huadu": (-9, 0), "zengcheng": (8, 0), "baiyun": (-16, 0),
-          "tianhe": (3, 15), "yuexiu": (-13, 3), "haizhu": (-3, -5), "panyu": (-6, -2),
-          "nansha": (-10, 3), "huangpu": (8, 0)}
-F1_LEADER = {"baiyun", "huadu", "tianhe", "yuexiu", "nansha"}
+F1_OFF_DATA = {
+          "conghua": (0.02, 0.016),
+          "huadu": (-0.02, 0.016),
+          "zengcheng": (0.02, 0.016),
+          "baiyun": (-0.045, 0.0),
+          "tianhe": (0.04, 0.052, "center", "bottom"),
+          "yuexiu": (-0.05, 0.030),
+          "haizhu": (-0.02, -0.016),
+          "panyu": (-0.02, -0.016),
+          "nansha": (0.02, -0.016),
+          "huangpu": (0.02, -0.016)
+}
+F1_LEADER = None   # labels sit beside their own points; no leader lines
 
 
 def fig1_map(ax, coords, off=None, leader=None):
     """Panel (a): grid centroids, the 3-nearest-neighbour edges, and city labels."""
-    off = F1_OFF if off is None else off
-    leader = F1_LEADER if leader is None else leader
+    off = F1_OFF_DATA if off is None else off
     A = sim.adjacency(3)
     G = sim.GRIDS
+    leader = set() if F1_LEADER is None else F1_LEADER   # no leader lines by default
     lon = [coords[g][0] for g in G]
     lat = [coords[g][1] for g in G]
     for i in range(len(G)):
@@ -166,18 +175,26 @@ def fig1_map(ax, coords, off=None, leader=None):
             if A[i, j2] > 0:
                 ax.plot([lon[i], lon[j2]], [lat[i], lat[j2]], "-", color="#9a9a9a",
                         lw=0.7, zorder=1)
-    ax.scatter(lon, lat, s=42, c="#1f4e79", edgecolor="white", linewidth=0.8, zorder=3)
+    ax.scatter(lon, lat, s=42, c="#1f4e79", edgecolor="none", zorder=3)
     for g, x, y in zip(G, lon, lat):
-        dx, dy = off[g]
+        dx, dy = off[g][0], off[g][1]
         ha = "left" if dx > 0 else ("right" if dx < 0 else "center")
         va = "bottom" if dy > 0 else ("top" if dy < 0 else "center")
+        if dx == 0:
+            ha = "center"
+        if dy == 0:
+            va = "center"
+        if len(off[g]) > 2:
+            ha = off[g][2]
+        if len(off[g]) > 3:
+            va = off[g][3]
         kw = {}
         if g in leader:            # displaced labels get the dotted leader line
             kw["arrowprops"] = dict(arrowstyle="-", lw=0.45, color="#c9c9c9",
                                     linestyle=(0, (1, 1.6)),
                                     shrinkA=1.5, shrinkB=2.5)
-        ax.annotate(g.capitalize(), (x, y), textcoords="offset points",
-                    xytext=(dx, dy), fontsize=5.6, ha=ha, va=va, **kw)
+        ax.annotate(g.capitalize(), (x + dx, y + dy), textcoords="data",
+                    fontsize=5.6, ha=ha, va=va, **kw)
     ax.set_xlabel("Longitude (°E)", labelpad=1)
     ax.set_ylabel("Latitude (°N)", labelpad=1)
     ax.set_aspect("equal", adjustable="datalim")
@@ -200,7 +217,7 @@ def fig1_system():
     pS = sim.build_panel(seed=1, scenario="S", kappa=0.6)
     yr = 2019
     for p, col, ls, lab in ((pM, "#999999", ":", "M: memoryless"),
-                            (pL, "#1f4e79", "-", "L: 2–3 week lag"),
+                            (pL, "#1f4e79", "-", "L: three-week lag"),
                             (pS, "#b2182b", "--", "S: lag + spatial")):
         s_ = p[(p.grid == "tianhe") & (p.year == yr)].sort_values("week_in_year")
         ax.plot(s_.week_in_year, s_.BI, ls, color=col, lw=1.0, label=lab)
@@ -223,14 +240,14 @@ def fig1_system():
     x = np.arange(len(labs))
     cols = ["#bbbbbb", "#1f4e79", "#bbbbbb", "#1f4e79"][:len(labs)]
     for i, v in enumerate(vals):
-        ax.text(i, v + 0.012, f"{v:.2f}", ha="center", fontsize=5.8)
+        ax.text(i, v + 0.012, f"{v:.3f}", ha="center", fontsize=5.8)
     ax.set_xticks(x); ax.set_xticklabels(labs, fontsize=5.8, linespacing=1.25)
     ax.tick_params(axis="x", pad=5.0)
     ax.set_ylim(0.5, 1.0); ax.set_ylabel("Achievable R²", labelpad=1)
     ax.grid(axis="y", lw=0.35, alpha=0.3)
     ax.bar(x, vals, 0.55, color=cols, edgecolor="white", linewidth=0.4, zorder=3)
     finish_letters(fig, [[(axA, "(a)"), (axC, "(c)")], [(axB, "(b)")]])
-    save(fig, "Fig1_system")
+    save(fig, "Fig1 System")
 
 
 # --------------------------------------------------------------------- Fig 2
@@ -279,10 +296,13 @@ def fig2_simulator(seed=1, scen="L"):
     ax.grid(axis="x", lw=0.35, alpha=0.3)
     panel_letter(ax, "(c)", y=-0.28)
     fig.tight_layout(w_pad=1.2)
-    save(fig, "Fig2_simulator")
+    save(fig, "Fig2 Simulator")
 
 
 # --------------------------------------------------------------------- Fig 3
+ML_LABEL = {"RandomForest": "Random forest"}   # match manuscript spelling
+
+
 def fig3_arm_comparison(scen="L"):
     d = load_metrics()
     d = d[(d.scenario == scen) & (~d.model.str.startswith("oracle"))]
@@ -304,14 +324,15 @@ def fig3_arm_comparison(scen="L"):
         x = np.arange(n_arm) + (k - (n_mod - 1) / 2) * w
         ax.bar(x, sub["mean"], w * 0.92, yerr=sub["std"], capsize=1.2,
                color=C.get(m, "#333333"), edgecolor="white", linewidth=0.4,
-               hatch=hatch.get(m, ""), error_kw={"lw": 0.6}, label=m, zorder=3)
+               hatch=hatch.get(m, ""), error_kw={"lw": 0.6},
+               label=ML_LABEL.get(m, m), zorder=3)
     ax.set_xticks(np.arange(n_arm))
     ax.set_xticklabels([ARM_LABEL.get(a, a) for a in arms], fontsize=6.2, linespacing=1.1)
     ax.set_ylabel("R² (rolling origin, 2019–2022)")
-    ax.set_ylim(0.60, 0.895)
+    ax.set_ylim(0, 0.895)  # bars encode area: axis starts at zero
     ax.grid(axis="y", lw=0.4, alpha=0.35, zorder=0)
-    ax.legend(ncol=2, frameon=False, loc="upper left", handlelength=1.4,
-              columnspacing=0.9, handletextpad=0.5)
+    ax.legend(ncol=4, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.02),
+              handlelength=1.4, columnspacing=0.9, handletextpad=0.5)
     panel_letter(ax, "(a)", y=-0.30)
 
     # paired difference of every model against SARIMA, computed panel by panel
@@ -352,7 +373,7 @@ def fig3_arm_comparison(scen="L"):
                 edgecolor="white", linewidth=0.4, zorder=3)
         ax.errorbar(sub.d.iloc[0], i, xerr=sub.sd.iloc[0], fmt="none",
                     ecolor="#333", lw=0.6, capsize=1.2, zorder=4)
-        ypos.append(i); labels.append(f"{m} · {'weather' if arm=='F0' else '+grid'}")
+        ypos.append(i); labels.append(f"{ML_LABEL.get(m, m)} · {'weather' if arm=='F0' else '+grid'}")
     ax.axvline(0, color="black", lw=0.7, zorder=8)
     ax.set_yticks(ypos); ax.set_yticklabels(labels, fontsize=6.4)
     ax.invert_yaxis()
@@ -360,7 +381,7 @@ def fig3_arm_comparison(scen="L"):
     ax.grid(axis="x", lw=0.4, alpha=0.35, zorder=0)
     panel_letter(ax, "(b)", y=-0.30)
     fig.tight_layout(w_pad=1.5)
-    save(fig, "Fig3_information_arms")
+    save(fig, "Fig3 Information Arms")
 
 
 # --------------------------------------------------------------------- Fig 4
@@ -383,7 +404,7 @@ def fig4_proxy_dose():
         ax.errorbar(np.arange(len(arms)) + off[m], sub["mean"], yerr=sub["std"], marker=mk[m],
                     ms=3.2, lw=0.9, capsize=1.5, color=C.get(m, "#333"),
                     mfc="none" if m == "RandomForest" else C.get(m, "#333"),
-                    label=m, zorder=3)
+                    label=ML_LABEL.get(m, m), zorder=3)
     ax.set_xticks(range(len(arms)))
     ax.set_xticklabels([lab[a] for a in arms], fontsize=6, linespacing=1.0)
     ax.set_ylabel("R²", labelpad=1)
@@ -424,7 +445,7 @@ def fig4_proxy_dose():
                     ha="left", va="bottom", fontsize=6.2, color="#1f4e79")
     panel_letter(ax, "(b)", y=-0.34)
     fig.tight_layout(w_pad=1.2)
-    save(fig, "Fig4_proxy_dose")
+    save(fig, "Fig4 Proxy Dose")
 
 
 # --------------------------------------------------------------------- Fig 5
@@ -473,7 +494,7 @@ def fig5_graph_boundary():
     ax.grid(axis="x", lw=0.35, alpha=0.3)
     panel_letter(ax, "(b)", y=-0.30)
     fig.tight_layout(w_pad=1.2)
-    save(fig, "Fig5_graph_boundary")
+    save(fig, "Fig5 Graph Boundary")
 
 
 # --------------------------------------------------------------------- Fig 6
@@ -515,7 +536,7 @@ def fig6_shap(seed=2024, year=2021):
     ax.grid(axis="x", lw=0.35, alpha=0.3)
     panel_letter(ax, "(a)", y=-0.22) if False else None
     fig.tight_layout()
-    save(fig, "Fig6_shap")
+    save(fig, "Fig6 SHAP")
 
 
 if __name__ == "__main__":

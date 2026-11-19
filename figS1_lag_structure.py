@@ -15,10 +15,10 @@ Data source: results/dml_lag_effects_v2.csv, column `truth`
 Points are means over the ten panels.
 
 Outputs (into $AEGIS_FIG, default ./figures):
-    FigS1_lag_structure.tif   1000 dpi, LZW, RGB  (submission file)
-    FigS1_lag_structure.pdf   vector              (submission file)
-    FigS1_lag_structure.png   200 dpi              (preview)
-    FigS1_lag_structure_embed.png  2400 px        (inline copy for the .docx)
+    FigS1 Lag Structure.tif   1000 dpi, LZW, RGB  (submission file)
+    FigS1 Lag Structure.pdf   vector              (submission file)
+    FigS1 Lag Structure.png   200 dpi              (preview)
+    FigS1 Lag Structure_embed.png  2400 px        (inline copy for the .docx)
 
 Usage:  python figS1_lag_structure.py
 Env:    AEGIS_OUT / AEGIS_FIG override the results and figure directories.
@@ -72,8 +72,8 @@ def figS1_lag_structure():
     ax.set_ylim(-0.016, 0.218)
     ax.set_xlim(lags.min() - 0.35, lags.max() + 0.35)
     ax.set_xticks(lags)
-    ax.set_xlabel("Lag (weeks)", labelpad=1)
-    ax.set_ylabel("True effect on BI (per \u00b0C)", labelpad=1)
+    ax.set_xlabel("Lag (weeks)", labelpad=5)
+    ax.set_ylabel("True effect on BI (per \u00b0C)", labelpad=3)
     ax.grid(lw=0.35, alpha=0.3, zorder=0)
     zl = lags[T == 0]
     if len(zl) >= 2:
@@ -91,8 +91,8 @@ def figS1_lag_structure():
     ax.set_yticks([1e-4, 1e-3, 1e-2, 1e-1])
     ax.set_xlim(lags.min() - 0.35, lags.max() + 0.35)
     ax.set_xticks(lags)
-    ax.set_xlabel("Lag (weeks)", labelpad=1)
-    ax.set_ylabel("True effect on BI (per mm)", labelpad=1)
+    ax.set_xlabel("Lag (weeks)", labelpad=5)
+    ax.set_ylabel("True effect on BI (per mm)", labelpad=3)
     ax.grid(which="major", lw=0.35, alpha=0.3, zorder=0)
     figs.panel_letter(ax, "(b)", y=-0.34)
 
@@ -101,7 +101,7 @@ def figS1_lag_structure():
 
     # native 2400-px copy for the inline figure in the supplementary .docx
     # (rendered at savefig time, never upsampled from the 200-dpi preview)
-    emb = os.path.join(FIG, "FigS1_lag_structure_embed.png")
+    emb = os.path.join(FIG, "FigS1 Lag Structure_embed.png")
     w_in = fig.get_size_inches()[0]
     fig.savefig(emb, dpi=EMBED_PX / w_in, bbox_inches="tight")
     from PIL import Image
@@ -111,7 +111,7 @@ def figS1_lag_structure():
         im.resize((EMBED_PX, h), Image.LANCZOS).save(emb, dpi=(600, 600))
     print(f"  embed copy {Image.open(emb).size} px")
 
-    figs.save(fig, "FigS1_lag_structure")
+    figs.save(fig, "FigS1 Lag Structure")
 
     print("  values (mean over panels):")
     for k, row in m.iterrows():
